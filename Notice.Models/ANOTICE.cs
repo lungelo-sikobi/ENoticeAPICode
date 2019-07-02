@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace Notice.Models
 {
-    public class ANOTICE
+    public class aNotice
     {
-        private int NoticeID;
-        private DateTime DateAndTime_p;
-        private DateTime DateAndTime_Expire;
-        private DateTime DateAndTime_Show;
-        private string Title;
-        private string Description;
-        private int CategoryID;
-        private int AdminID;
-
+        public int NoticeID;
+        public DateTime DateAndTime_p;
+        public DateTime DateAndTime_Expire;
+        public DateTime DateAndTime_Show;
+        public string Title;
+        public string Description;
+        public int CategoryID;
+        public int AdminID;
+        public string CatName;
+        public bool HasImage;
+        public string Picture;
     }
 }

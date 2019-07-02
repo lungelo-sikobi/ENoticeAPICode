@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Notice.DAL;
+using Notice.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,11 +11,60 @@ namespace NoticeAPI.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        private DataAcess da = new DataAcess();
+        
+        [HttpPost]
+        [Route("api/Values/Insert Catagory")]
+        public void InsertCategory(Categories obj)
         {
-            return new string[] { "value1", "value2" };
+            da.InsertCategory(obj);
         }
+        [HttpGet]
+        [Route("api/Values/GetAdmin")]
+        public IHttpActionResult GetAdmin()
+        {
+            var list = da.GetAdmins();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+
+        [HttpGet]
+        [Route("api/Values/GetCatagory")]
+        public IHttpActionResult GetCategory()
+        {
+            var list = da.GetCategories();
+            
+            if(list==null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        
+        [HttpPost]
+        [Route("api/Values/Insert Admin")]
+        public void InsertAdmin(Admin obj)
+        {
+            da.InsertAdmin(obj);
+        }
+        [HttpPost]
+        [Route("api/Values/Insert Notice")]
+        public void InsertNotice(aNotice obj)
+        {
+            da.InsertNotice(obj);
+        }
+
+
+
+
+
+
+
 
         // GET api/values/5
         public string Get(int id)
