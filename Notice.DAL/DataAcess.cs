@@ -6,6 +6,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
+using System.Data;
+using System.Drawing;
+using System.IO;
 
 namespace Notice.DAL
 {
@@ -136,10 +141,40 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                     command.Parameters.AddWithValue("@c", obj.Cellphone);
                     command.ExecuteNonQuery();
+
                 }
             }
 
         }
+
+        private int randomNumber(int min,int max)
+        {
+            Random ran = new Random();
+            
+
+            return ran.Next(min, max);
+        }
+
+        private string randomString(int length)
+        {
+            StringBuilder sb = new StringBuilder();
+            Random ran = new Random();
+            char value;
+            for(int i = 0; i < length;i++)
+            {
+                value = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * ran.NextDouble() + 65)));
+                sb.Append(value);
+
+                
+            }
+
+            return sb.ToString();
+
+        }
+       
+
+
+        int i = 0;
         public void UpdateAdmin(Admin obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -156,9 +191,16 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                     command.Parameters.AddWithValue("@c", obj.Cellphone);
                     command.Parameters.AddWithValue("@id", obj.AdminID);
-                    command.ExecuteNonQuery();
+                  i  =command.ExecuteNonQuery();
                 }
             }
+            if (i==1)
+            {
+               
+
+            }
+
+
 
         }
         public void InsertNotice(aNotice obj)
