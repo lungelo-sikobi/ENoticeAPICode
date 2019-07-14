@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Notice.Models\Notice.Models.csproj">
-      <Project>{F9254F83-193E-412D-BFFE-9982DFDEECDE}</Project>
+      <Project>{f9254f83-193e-412d-bffe-9982dfdeecde}</Project>
       <Name>Notice.Models</Name>
     </ProjectReference>
   </ItemGroup>
