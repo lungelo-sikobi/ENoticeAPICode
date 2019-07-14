@@ -20,14 +20,7 @@ namespace Notice.DAL
 
         public List<aNotice> GetNoticesData()
         {
-            /*
-            List<Author> authors = new List<Author>
-                {
-                    new Author { Name = "Mahesh Chand", Book = "Apress", Price = 49.95 },
-                    new Author { Name = "Neel Beniwal", Book = "Apress", Price = 19.95 },
-                    new Author { Name = "Chris Love", Book = "PakT", Price = 29.95 }
-                };
-            */
+            
             var objStu = new aNotice();
             List<aNotice> resut = new List<aNotice>();
 
