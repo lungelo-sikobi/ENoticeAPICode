@@ -46,8 +46,9 @@ namespace Notice.DAL
                         NoticeID = Convert.ToInt32(dataReader["NoticeID"].ToString()),
                         DateAndTime_p = Convert.ToDateTime(dataReader["DateAndTime_p"].ToString()),
                         Title = dataReader["Title"].ToString(),
-                        C
-                       
+                        Description = dataReader["Description"].ToString(),
+                        CatName = dataReader["CatName"].ToString()
+
                     };
                     resut.Add(obj);
 
