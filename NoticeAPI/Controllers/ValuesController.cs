@@ -59,8 +59,18 @@ namespace NoticeAPI.Controllers
             da.InsertNotice(obj);
         }
 
+        [HttpGet]
+        [Route("api/Values/GetNoticeData")]
+        public IHttpActionResult GetNoticeData()
+        {
+            var list = da.GetNoticeData();
 
-
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
 
 
 

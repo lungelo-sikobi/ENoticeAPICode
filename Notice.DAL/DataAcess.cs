@@ -21,13 +21,37 @@ namespace Notice.DAL
         public List<aNotice> GetNoticesData()
         {
             
-            List<aNotice> authors = new List<aNotice>
+            var objStu = new aNotice();
+            List<aNotice> resut = new List<aNotice>();
+
+
+            string query = string.Format("Select * From aNotice");
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(query, conn);
+            SqlDataReader dataReader = cmd.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
                 {
-                    new aNotice { NoticeID = 1, Description = "Apress", AdminID = 495 },
-                   
-                };
-            
-            return null;
+                    aNotice obj = new aNotice
+                    {
+                        NoticeID = Convert.ToInt32(dataReader["NoticeID"].ToString()),
+                        DateAndTime_p = Convert.ToDateTime(dataReader["DateAndTime_p"].ToString()),
+                        Title = dataReader["Title"].ToString(),
+                        Description = dataReader["Description"].ToString(),
+                        CatName = dataReader["CatName"].ToString()
+
+                    };
+                    resut.Add(obj);
+
+                }
+            }
+            cmd.Dispose();
+            conn.Close();
+            conn.Dispose();
+
+            return resut;
 
         }
         public List<Admin> GetAdmins()
@@ -126,7 +150,6 @@ namespace Notice.DAL
         }
         public void InsertAdmin(Admin obj)
         {
-           
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -144,12 +167,14 @@ namespace Notice.DAL
 
                 }
             }
-            
+
         }
 
         private int randomNumber(int min,int max)
         {
             Random ran = new Random();
+            
+
             return ran.Next(min, max);
         }
 
