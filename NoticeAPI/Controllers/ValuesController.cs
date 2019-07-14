@@ -16,13 +16,14 @@ namespace NoticeAPI.Controllers
     public class ValuesController : ApiController
     {
         private DataAcess da = new DataAcess();
-        
+        //Admin API's
         [HttpPost]
-        [Route("api/Values/Insert Catagory")]
-        public void InsertCategory(Categories obj)
+        [Route("api/Values/Insert Admin")]
+        public void InsertAdmin(Admin obj)
         {
-            da.InsertCategory(obj);
+            da.InsertAdmin(obj);
         }
+
         [HttpGet]
         [Route("api/Values/GetAdmin")]
         public IHttpActionResult GetAdmin()
@@ -37,6 +38,14 @@ namespace NoticeAPI.Controllers
         }
 
 
+        //Category API's
+        [HttpPost]
+        [Route("api/Values/Insert Catagory")]
+        public void InsertCategory(Categories obj)
+        {
+            da.InsertCategory(obj);
+        }
+
         [HttpGet]
         [Route("api/Values/GetCatagory")]
         public IHttpActionResult GetCategory()
@@ -50,12 +59,8 @@ namespace NoticeAPI.Controllers
             return Ok(list);
         }
         
-        [HttpPost]
-        [Route("api/Values/Insert Admin")]
-        public void InsertAdmin(Admin obj)
-        {
-            da.InsertAdmin(obj);
-        }
+
+       //Notice API's
         [HttpPost]
         [Route("api/Values/Insert Notice")]
         public void InsertNotice(aNotice obj)
