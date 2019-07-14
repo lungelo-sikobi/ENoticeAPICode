@@ -6,6 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
+using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace NoticeAPI.Controllers
 {
@@ -63,7 +67,7 @@ namespace NoticeAPI.Controllers
         [Route("api/Values/GetNoticeData")]
         public IHttpActionResult GetNoticeData()
         {
-            var list = da.GetNoticeData();
+            var list = da.GetNoticesData();
 
             if (list == null)
             {
