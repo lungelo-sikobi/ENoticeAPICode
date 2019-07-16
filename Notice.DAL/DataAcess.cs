@@ -40,7 +40,7 @@ namespace Notice.DAL
                     Categories obj = new Categories
                     {
                         ID = Convert.ToInt32(dataReader["CategoryID"].ToString()),
-                        name = dataReader["CategoryName"].ToString()
+                        Name = dataReader["CategoryName"].ToString()
                     };
                     resut.Add(obj);
 
@@ -53,19 +53,21 @@ namespace Notice.DAL
             return resut;
         }
 
-        public void InsertCategory(Categories obj)
+        public string InsertCategory(Categories obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO Categories(CategoryName) VALUES(@name)";
+                    command.CommandText = "INSERT INTO Categories(CategoryName) VALUES(@Name)";
 
-                    command.Parameters.AddWithValue("@name", obj.name);
+                    command.Parameters.AddWithValue("@Name", obj.Name);
                     command.ExecuteNonQuery();
+                    return "";
                 }
             }
+            
 
         }
    
@@ -76,9 +78,9 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update  Categories SET CategoryName=@name where CategoryID=@ID";
-
-                    command.Parameters.AddWithValue("@name", obj.name);
+                    command.CommandText = "Update  Categories SET CategoryID=@id,CategoryName=@nm where CategoryID=@id";
+                    command.Parameters.AddWithValue("@id", obj.ID);
+                    command.Parameters.AddWithValue("@nm", obj.Name);
                     command.ExecuteNonQuery();
                 }
             }
@@ -202,7 +204,7 @@ namespace Notice.DAL
             List<aNotice> resut = new List<aNotice>();
 
 
-            string query = string.Format("Select * From aNotice");
+            string query = string.Format("Select * From Notices");
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -216,8 +218,8 @@ namespace Notice.DAL
                         NoticeID = Convert.ToInt32(dataReader["NoticeID"].ToString()),
                         DateAndTime_p = Convert.ToDateTime(dataReader["DateAndTime_p"].ToString()),
                         Title = dataReader["Title"].ToString(),
-                        Description = dataReader["Description"].ToString(),
-                        CatName = dataReader["CatName"].ToString()
+                        Description = dataReader["Description"].ToString()
+                      
 
                     };
                     resut.Add(obj);
@@ -240,7 +242,7 @@ namespace Notice.DAL
             List<aNotice> resut = new List<aNotice>();
 
 
-            string query = string.Format("Select * From aNotice");
+            string query = string.Format("Select * From Notices");
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -323,6 +325,18 @@ namespace Notice.DAL
 
         }
 
+        public void DeleteNotice(aNotice ad)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand comm = connection.CreateCommand())
+                {
+                    comm.CommandText = "Delete ON Notices where NoticeID=@NoticeID";
+                    comm.ExecuteNonQuery();
+                }
+            }
+        }
         //Password Generator
 
 
