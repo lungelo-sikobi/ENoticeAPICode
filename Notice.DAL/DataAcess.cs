@@ -131,9 +131,14 @@ namespace Notice.DAL
             return resut;
         }
 
-
-        public void InsertAdmin(Admin obj)
+        int i = 0;
+        public String InsertAdmin(Admin obj)
         {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(randomNumber(10, 199));
+            sb.Append(randomString(7));
+            var passText = sb.ToString();
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -144,10 +149,27 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@n", obj.Name);
                     command.Parameters.AddWithValue("@s", obj.Surname);
                     command.Parameters.AddWithValue("@e", obj.Email);
-                    command.Parameters.AddWithValue("@p", obj.Password);
+                    command.Parameters.AddWithValue("@p", obj.Password).Value= passText;
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                     command.Parameters.AddWithValue("@c", obj.Cellphone);
                     command.ExecuteNonQuery();
+
+
+
+                    MailMessage msg = new MailMessage();
+                    msg.From = new MailAddress("nokwazimasindane24@gmail.com");
+                    msg.To.Add(obj.Email);
+                    msg.Subject = "your password " + obj.Email + "";
+                    msg.Body = "Login Details <br/> User name:" + obj.Email + "password: " + passText;
+                    msg.IsBodyHtml = true;
+
+                    SmtpClient smtp = new SmtpClient("",26);
+                    smtp.Credentials = new System.Net.NetworkCredential("username", "password");
+                    smtp.EnableSsl = false;
+                    smtp.Send(msg);
+                    msg.Dispose();
+                    return "please check your email for a password";
+                 
 
                 }
 
@@ -155,7 +177,7 @@ namespace Notice.DAL
 
         }
 
-        int i = 0;
+    
         public void UpdateAdmin(Admin obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -318,6 +340,12 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@h", obj.HasImage);
                     command.Parameters.AddWithValue("@id", obj.NoticeID);
                     command.ExecuteNonQuery();
+
+
+
+
+
+
                 }
             }
 
@@ -355,6 +383,6 @@ namespace Notice.DAL
 
        
        
-
+         
     }
 }
