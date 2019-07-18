@@ -8,16 +8,16 @@ namespace Notice.Models
 {
     public class aNotice
     {
-        public int NoticeID;
-        public DateTime DateAndTime_p;
-        public DateTime DateAndTime_Expire;
-        public DateTime DateAndTime_Show;
-        public string Title;
-        public string Description;
-        public int CategoryID;
-        public int AdminID;
-        public string CatName;
-        public bool HasImage;
-        public string Picture;
+        public int NoticeID { get; set; }
+        public DateTime DateAndTime_p { get; set; }
+        public DateTime DateAndTime_Expire { get; set; }
+        public DateTime DateAndTime_Show { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public int CategoryID { get; set; }
+        public int AdminID { get; set; }
+        public string CatName { get; set; }
+        public bool HasImage { get; set; }
+        public string Picture { get; set; }
     }
 }

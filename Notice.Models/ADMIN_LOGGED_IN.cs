@@ -8,10 +8,10 @@ namespace Notice.Models
 {
     public class ADMIN_LOGGED_IN
     {
-        private int LogID; 
-        private DateTime LoggedIN;
-        private DateTime LoggedOut;
-        private int Adminl;
+        private int LogID { get; set; }
+        private DateTime LoggedIN { get; set; }
+        private DateTime LoggedOut { get; set; }
+        private int Adminl { get; set; }
 
     }
 }

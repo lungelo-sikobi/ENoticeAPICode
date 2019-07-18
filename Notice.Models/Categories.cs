@@ -8,8 +8,8 @@ namespace Notice.Models
 {
     public class Categories
     {
-        public int ID;
-        public string name;
-
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string description { get; set; }
     }
 }
