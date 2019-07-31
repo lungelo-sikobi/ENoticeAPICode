@@ -295,7 +295,7 @@ namespace Notice.DAL
             }
 
         }
-
+        
 
         public void UpdateNotice(aNotice obj)
         {
@@ -323,9 +323,66 @@ namespace Notice.DAL
 
         }
 
+
+        public void InsertAttachment(ImageAttach obj)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "INSERT INTO Attachmentss(Attachment,fileExtension,NoticeID) VALUES(@A,@FE,@N)";
+
+                    command.Parameters.AddWithValue("@A", obj.Attachment);
+
+                    command.Parameters.AddWithValue("@FE", obj.fileExtension);
+
+                    command.Parameters.AddWithValue("@N", obj.NoticeID);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public List<ImageAttach> GetAttachment()
+        {
+          
+
+                var objImage = new ImageAttach();
+                List<ImageAttach> result = new List<ImageAttach>();
+
+
+                string query = string.Format("Select * From Attachments");
+                SqlConnection conn = new SqlConnection(connectionString);
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader dataReader = cmd.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ImageAttach obj = new ImageAttach
+                        {
+                            AttachID = Convert.ToInt32(dataReader["AttachID"].ToString()),
+                            Attachment = dataReader["Attachment"].ToString(),
+                            fileExtension = dataReader["fileExtension"].ToString(),
+                            NoticeID = Convert.ToInt32(dataReader["NoticeID"].ToString()),
+
+                        };
+                        result.Add(obj);
+
+                    }
+                }
+                cmd.Dispose();
+                conn.Close();
+                conn.Dispose();
+
+                return result;
+
+            
+        }
+
         //Password Generator
-
-
         private int randomNumber(int min,int max)
         {
             Random ran = new Random();
