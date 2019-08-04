@@ -8,13 +8,13 @@ namespace Notice.Models
 {
     public class Admin
     {
-        public int  AdminID;
-        public string Name;
-        public string Surname;
-        public string Email;
-        public string Password;
-        public string DepartID;
-        public string Cellphone;
+        public int  AdminID { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string DepartID { get; set; }
+        public string Cellphone { get; set; }
 
     }
 }

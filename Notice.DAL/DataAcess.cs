@@ -353,6 +353,18 @@ namespace Notice.DAL
 
         }
 
+        public void DeleteNotice(aNotice ad)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand comm = connection.CreateCommand())
+                {
+                    comm.CommandText = "Delete ON Notices where NoticeID=@NoticeID";
+                    comm.ExecuteNonQuery();
+                }
+            }
+        }
         //Password Generator
 
 
