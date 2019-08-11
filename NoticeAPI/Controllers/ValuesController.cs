@@ -1,12 +1,6 @@
 ﻿using Notice.DAL;
 using Notice.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -78,11 +72,34 @@ namespace NoticeAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(list);
+             return Ok(list);
         }
 
 
 
+       
+        //atttachment API's
+        [HttpPost]
+        [Route("api/Values/InsertAttachmnents")]
+        public void InsertAttachments(ImageAttach obj)
+        {
+            da.InsertAttachment(obj);
+        }
+
+
+        [HttpGet]
+        [Route("api/Values/GetAttachmnents")]
+        public IHttpActionResult GetAttachmnents()
+        {
+            var list = da.GetAttachment();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+      
 
 
         // GET api/values/5

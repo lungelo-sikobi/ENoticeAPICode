@@ -353,7 +353,7 @@ namespace Notice.DAL
             }
 
         }
-
+        
 
         public void UpdateNotice(aNotice obj)
         {
@@ -402,6 +402,7 @@ namespace Notice.DAL
         //Password Generator
 
 
+        //Password Generator
         private int randomNumber(int min,int max)
         {
             Random ran = new Random();
