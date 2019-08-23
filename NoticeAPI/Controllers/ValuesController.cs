@@ -1,12 +1,6 @@
 ﻿using Notice.DAL;
 using Notice.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -18,7 +12,7 @@ namespace NoticeAPI.Controllers
         private DataAcess da = new DataAcess();
         //Admin API's
         [HttpPost]
-        [Route("api/Values/Insert Admin")]
+        [Route("api/Values/InsertAdmin")]
         public void InsertAdmin(Admin obj)
         {
             da.InsertAdmin(obj);
@@ -40,7 +34,7 @@ namespace NoticeAPI.Controllers
 
         //Category API's
         [HttpPost]
-        [Route("api/Values/Insert Catagory")]
+        [Route("api/Values/InsertCatagory")]
         public void InsertCategory(Categories obj)
         {
             da.InsertCategory(obj);
@@ -62,7 +56,7 @@ namespace NoticeAPI.Controllers
 
        //Notice API's
         [HttpPost]
-        [Route("api/Values/Insert Notice")]
+        [Route("api/Values/InsertNotice")]
         public void InsertNotice(aNotice obj)
         {
             da.InsertNotice(obj);
@@ -78,11 +72,34 @@ namespace NoticeAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(list);
+             return Ok(list);
         }
 
 
 
+       
+        //atttachment API's
+        [HttpPost]
+        [Route("api/Values/InsertAttachmnents")]
+        public void InsertAttachments(ImageAttach obj)
+        {
+            da.InsertAttachment(obj);
+        }
+
+
+        [HttpGet]
+        [Route("api/Values/GetAttachmnents")]
+        public IHttpActionResult GetAttachmnents()
+        {
+            var list = da.GetAttachment();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+      
 
 
         // GET api/values/5

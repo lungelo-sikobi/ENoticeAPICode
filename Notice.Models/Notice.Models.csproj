@@ -53,9 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin.cs" />
-    <Compile Include="ADMIN_LOGGED_IN.cs" />
     <Compile Include="aNotice.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="ImageAttach.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
