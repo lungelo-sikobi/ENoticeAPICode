@@ -181,36 +181,7 @@ namespace Notice.DAL
 
         }
         //loo
-        public bool logiin( string email ,string Password)
-        {
-            Admin admins = new Admin();
-            ADMIN_LOGGED_IN _LOGGED_IN = new ADMIN_LOGGED_IN();
-            
-            List<Admin> resut = new List<Admin>();
-
-
-            string query = string.Format("Select * From Admin where email ='" + email +"'and password = '"+ Password);
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader dataReader = cmd.ExecuteReader();
-            if (dataReader.HasRows)
-            {
-                while (dataReader.Read())
-                {
-                    admins.AdminID = Convert.ToInt32(dataReader["AdminID"]);
-
-                    
-
-                }
-            }
-            cmd.Dispose();
-            conn.Close();
-            conn.Dispose();
-
-            return resut;
-        }
-
+        
         public void UpdateAdmin(Admin obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
