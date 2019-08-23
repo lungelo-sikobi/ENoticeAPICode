@@ -40,7 +40,9 @@ namespace Notice.DAL
                     Categories obj = new Categories
                     {
                         ID = Convert.ToInt32(dataReader["CategoryID"].ToString()),
-                        Name = dataReader["CategoryName"].ToString()
+                        Name = dataReader["CategoryName"].ToString(),
+                        //CategoryDescription
+                        description= dataReader["CategoryDescription"].ToString()
                     };
                     resut.Add(obj);
 
@@ -78,7 +80,7 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update  Categories SET CategoryID=@id,CategoryName=@nm where CategoryID=@id";
+                    command.CommandText = "Update  Categories SET CategoryName=@nm where CategoryID=@id";
                     command.Parameters.AddWithValue("@id", obj.ID);
                     command.Parameters.AddWithValue("@nm", obj.Name);
                     command.ExecuteNonQuery();
