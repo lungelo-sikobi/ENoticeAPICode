@@ -77,21 +77,13 @@ namespace NoticeAPI.Controllers
 
 
 
-       
-        //atttachment API's
-        [HttpPost]
-        [Route("api/Values/InsertAttachmnents")]
-        public void InsertAttachments(ImageAttach obj)
-        {
-            da.InsertAttachment(obj);
-        }
 
-
+        //api what what
         [HttpGet]
-        [Route("api/Values/GetAttachmnents")]
-        public IHttpActionResult GetAttachmnents()
+        [Route("api/Values/GetNoticeTitles")]
+        public IHttpActionResult GetNoticeTitles()
         {
-            var list = da.GetAttachment();
+            var list = da.GetNoticeTitle();
 
             if (list == null)
             {
@@ -99,8 +91,6 @@ namespace NoticeAPI.Controllers
             }
             return Ok(list);
         }
-      
-
 
         // GET api/values/5
         public string Get(int id)
