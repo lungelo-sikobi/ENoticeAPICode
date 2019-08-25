@@ -3,14 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
 using System.Net.Mail;
-using System.Data;
-using System.Drawing;
-using System.IO;
+using System.Text;
 
 namespace Notice.DAL
 {
@@ -53,19 +47,19 @@ namespace Notice.DAL
             return resut;
         }
 
-        public string InsertCategory(Categories obj)
+        public int InsertCategory(Categories obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO Categories(CategoryName,CategoryDescrition) VALUES(@Name,@description)";
+                    command.CommandText = "INSERT INTO Categories(CategoryName,CategoryDescription) VALUES(@Name,@description)";
 
                     command.Parameters.AddWithValue("@Name", obj.Name);
                     command.Parameters.AddWithValue("@description", obj.description);
                     command.ExecuteNonQuery();
-                    return "";
+                    return 1;
                 }
             }
             
@@ -97,7 +91,7 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand comm = connection.CreateCommand())
                 {
-                    comm.CommandText = "Delete ON Categories where ID=@ID";
+                    comm.CommandText = "Delete from Categories where CategoryID=" + ob.ID;
                     comm.ExecuteNonQuery();
                 }
             }
@@ -147,6 +141,11 @@ namespace Notice.DAL
 
         public string InsertAdmin(Admin obj)
         {
+            //Generate a random password
+            string guid = Guid.NewGuid().ToString().Replace("-", "");
+            obj.Password = guid.Substring(0, 8);
+            var password = "";//Encrypt
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -161,7 +160,51 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                     command.Parameters.AddWithValue("@c", obj.Cellphone);
                     command.ExecuteNonQuery();
-                    return "";
+                    try
+                    {
+                        MailMessage mail = new MailMessage();
+                        SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("leonlungelo@gmail.com");
+                        mail.To.Add("leonlunge@gmail.com");
+                        mail.To.Add(obj.Email);
+                        mail.Subject = "Registration Successful";
+                        mail.Body += " <html>";
+                        mail.Body += "<body>";
+                        mail.Body += "<table>";
+                        mail.Body += "<tr>";
+                        mail.Body += "<td>Dear "+obj.Name+" "+obj.Surname+"";
+                        mail.Body += "</tr>";
+
+                        mail.Body += "<tr>";
+                        mail.Body += "<td>You have been successfully registered as the System Admin";
+                        mail.Body += "</tr>";
+                        mail.Body += "<tr>";
+                        mail.Body += "<td>Your password is "+obj.Password + ". Change your password on log in.</td>";
+                        mail.Body += "</tr>";
+                        mail.Body += "<tr>";
+                        mail.Body += "<td></td>";
+                        mail.Body += "</tr>";
+                        mail.Body += "<tr>";
+                        mail.Body += "<td>Kind Regards,</td>";
+                        mail.Body += "</tr>";
+                        mail.Body += "<tr>";
+                        mail.Body += "<td>Super Admin </td>";
+                        mail.Body += "</tr>";
+                        mail.Body += "</table>";
+                        mail.Body += "</body>";
+                        mail.Body += "</html>";
+                        mail.IsBodyHtml = true;
+                        SmtpServer.Port = 587;
+                        SmtpServer.Credentials = new System.Net.NetworkCredential("leonlungelo@gmail.com", "61342286");
+                        SmtpServer.EnableSsl = true;
+                        SmtpServer.Send(mail);
+                        return "Admin Successfully Registered!!!";
+                    }
+                    catch
+                    {
+                        return "Please Check your Internet Connection,There are services that require internet connection";
+                    }
+                   
                 }
 
             }
@@ -201,7 +244,8 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand comm = connection.CreateCommand())
                 {
-                    comm.CommandText = "Delete ON Admins where AdminID=@AdminID";
+                    comm.CommandText = "Delete from Admins where AdminID=@AdminID";
+                    comm.Parameters.AddWithValue("@AdminID", ad.AdminID);
                     comm.ExecuteNonQuery();
                 }
             }
@@ -382,9 +426,10 @@ namespace Notice.DAL
                 }
             }
         }
+
+
         //Password Generator
-
-
+        
         private int randomNumber(int min,int max)
         {
             Random ran = new Random();
