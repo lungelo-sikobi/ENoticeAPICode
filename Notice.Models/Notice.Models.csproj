@@ -56,6 +56,7 @@
     <Compile Include="Admin.cs" />
     <Compile Include="aNotice.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="ChangePassword.cs" />
     <Compile Include="ImageAttach.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,7 +11,11 @@ namespace Notice.Models
     {
         public int ID { get; set; }
         [Required]
+       
+        [Display(Name = "Category name")]
         public string Name { get; set; }
+        [Required]
+       
         public string description { get; set; }
     }
 }

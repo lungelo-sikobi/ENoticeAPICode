@@ -10,24 +10,34 @@ namespace Notice.Models
     public class aNotice
     {
         public int NoticeID { get; set; }
-        [Required]
-        public DateTime DateAndTime_p { get; set; }
-        [Required]
-        public DateTime DateAndTime_Expire { get; set; }
-        [Required]
-        public DateTime DateAndTime_Show { get; set; }
+      
+      
+      
+        public DateTime? DateAndTime_p { get; set; }
+       
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
+        public DateTime? DateAndTime_Expire { get; set; }
+
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}")]
+        public DateTime? DateAndTime_Show { get; set; }
+
         [Required]
         public string Title { get; set; }
+        
         [Required]
+      
+      
+       
         public string Description { get; set; }
-        [Required]
+       
         public int CategoryID { get; set; }
        
         public int AdminID { get; set; }
-        [Required]
+        
         public string CatName { get; set; }
-     
-        public bool HasImage { get; set; }
-        public string Picture { get; set; }
+       
     }
 }
