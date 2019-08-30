@@ -126,7 +126,7 @@ namespace Notice.DAL
                         Password = dataReader["Password"].ToString(),
                         DepartID = dataReader["DepartID"].ToString(),
                         LoggedOnce = Convert.ToBoolean(dataReader["LoggedOnce"]),
-                        
+                        SuperAdmin = Convert.ToBoolean(dataReader["SuperAdmin"])
                     };
                     resut.Add(obj);
 
@@ -161,8 +161,6 @@ namespace Notice.DAL
                     {
                         AdminID = Convert.ToInt32(dataReader["AdminID"].ToString()),
                   
-                       
-                       
                         Password = dataReader["Password"].ToString(),
                     
 
@@ -192,61 +190,68 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO Admin (Name,Surname,Email,Password,DepartID,LoggedOnce) VALUES(@n,@s,@e,@p,@d,@l)";
-
-                    command.Parameters.AddWithValue("@n", obj.Name);
-                    command.Parameters.AddWithValue("@s", obj.Surname);
-                    command.Parameters.AddWithValue("@e", obj.Email);
-                    command.Parameters.AddWithValue("@p", obj.Password);
-                    command.Parameters.AddWithValue("@d", obj.DepartID);
-                    command.Parameters.AddWithValue("@l", false);
-                    command.ExecuteNonQuery();
-                    try
-                    {
-                        MailMessage mail = new MailMessage();
-                        SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                        mail.From = new MailAddress("leonlungelo@gmail.com");
-                        mail.To.Add("leonlunge@gmail.com");
-                        mail.To.Add(obj.Email);
-                        mail.Subject = "Registration Successful";
-                        mail.Body += " <html>";
-                        mail.Body += "<body>";
-                        mail.Body += "<table>";
-                        mail.Body += "<tr>";
-                        mail.Body += "<td>Dear "+obj.Name+" "+obj.Surname+"";
-                        mail.Body += "</tr>";
-
-                        mail.Body += "<tr>";
-                        mail.Body += "<td>You have been successfully registered as the System Admin";
-                        mail.Body += "</tr>";
-                        mail.Body += "<tr>";
-                        mail.Body += "<td>Your password is "+obj.Password + ". Change your password on log in.</td>";
-                        mail.Body += "</tr>";
-                        mail.Body += "<tr>";
-                        mail.Body += "<td></td>";
-                        mail.Body += "</tr>";
-                        mail.Body += "<tr>";
-                        mail.Body += "<td>Kind Regards,</td>";
-                        mail.Body += "</tr>";
-                        mail.Body += "<tr>";
-                        mail.Body += "<td>Super Admin </td>";
-                        mail.Body += "</tr>";
-                        mail.Body += "</table>";
-                        mail.Body += "</body>";
-                        mail.Body += "</html>";
-                        mail.IsBodyHtml = true;
-                        SmtpServer.Port = 587;
-                        SmtpServer.Credentials = new System.Net.NetworkCredential("leonlungelo@gmail.com", "61342286");
-                        SmtpServer.EnableSsl = true;
-                        SmtpServer.Send(mail);
-                        return "Admin Successfully Registered!!!";
-                    }
-                    catch
-                    {
-                        return "Please Check your Internet Connection,There are services that require internet connection";
-                    }
                    
+
+                        command.CommandText = "INSERT INTO Admin (Name,Surname,Email,Password,DepartID,LoggedOnce,SuperAdmin) VALUES(@n,@s,@e,@p,@d,@l,@sa)";
+
+                        command.Parameters.AddWithValue("@n", obj.Name);
+                        command.Parameters.AddWithValue("@s", obj.Surname);
+                        command.Parameters.AddWithValue("@e", obj.Email);
+                        command.Parameters.AddWithValue("@p", obj.Password);
+                        command.Parameters.AddWithValue("@d", obj.DepartID);
+                        command.Parameters.AddWithValue("@l", false);
+                        command.Parameters.AddWithValue("@sa", obj.SuperAdmin);
+                        command.ExecuteNonQuery();
+                        try
+                        {
+                            MailMessage mail = new MailMessage();
+                            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                            mail.From = new MailAddress("leonlungelo@gmail.com");
+                            mail.To.Add("leonlunge@gmail.com");
+                            mail.To.Add(obj.Email);
+                            mail.Subject = "Registration Successful";
+                            mail.Body += " <html>";
+                            mail.Body += "<body>";
+                            mail.Body += "<table>";
+                            mail.Body += "<tr>";
+                            mail.Body += "<td>Dear " + obj.Name + " " + obj.Surname + "";
+                            mail.Body += "</tr>";
+
+                            mail.Body += "<tr>";
+                            mail.Body += "<td>You have been successfully registered as the System Admin";
+                            mail.Body += "</tr>";
+                            mail.Body += "<tr>";
+                            mail.Body += "<td>Your password is " + obj.Password + ". Change your password on log in.</td>";
+                            mail.Body += "</tr>";
+                            mail.Body += "<tr>";
+                            mail.Body += "<td></td>";
+                            mail.Body += "</tr>";
+                            mail.Body += "<tr>";
+                            mail.Body += "<td>Kind Regards,</td>";
+                            mail.Body += "</tr>";
+                            mail.Body += "<tr>";
+                            mail.Body += "<td>Super Admin </td>";
+                            mail.Body += "</tr>";
+                            mail.Body += "</table>";
+                            mail.Body += "</body>";
+                            mail.Body += "</html>";
+                            mail.IsBodyHtml = true;
+                            SmtpServer.Port = 587;
+                            SmtpServer.Credentials = new System.Net.NetworkCredential("leonlungelo@gmail.com", "61342286");
+                            SmtpServer.EnableSsl = true;
+                            SmtpServer.Send(mail);
+                            return "Admin Successfully Registered!!!";
+                        }
+                        catch
+                        {
+                            return "Please Check your Internet Connection,There are services that require internet connection";
+                        }
+
+
+                    
                 }
+                   
+                
 
             }
 
@@ -260,16 +265,16 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,Password=@p,DepartID=@d  where AdminID=@id";
+                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,DepartID=@d,SuperAdmin=@sa  where AdminID=@id";
 
                     command.Parameters.AddWithValue("@id", obj.AdminID);
                     command.Parameters.AddWithValue("@n", obj.Name);
                     command.Parameters.AddWithValue("@s", obj.Surname);
                     command.Parameters.AddWithValue("@e", obj.Email);
-                    command.Parameters.AddWithValue("@p", obj.Password);
                     command.Parameters.AddWithValue("@d", obj.DepartID);
-                  
-                    
+                    command.Parameters.AddWithValue("@sa", obj.SuperAdmin);
+                   // command.Parameters.AddWithValue("@cat", obj.CategoryID);
+
                     i = command.ExecuteNonQuery();
                     return "";
                 }
@@ -302,6 +307,7 @@ namespace Notice.DAL
 
         }
 
+
         public void DeleteAdmin(Admin ad)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -309,9 +315,10 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand comm = connection.CreateCommand())
                 {
-                    comm.CommandText = "Delete from Admin where AdminID=@AdminID";
-                    comm.Parameters.AddWithValue("@AdminID", ad.AdminID);
+                    comm.CommandText = "Delete from Admin where AdminID="+ad.AdminID;
+                    //comm.Parameters.AddWithValue("@A", ad.AdminID);
                     comm.ExecuteNonQuery();
+                    
                 }
             }
         }
@@ -357,39 +364,7 @@ namespace Notice.DAL
         }
 
 
-        //public List<aNotice> GetNoticeTitle()
-        //{
-
-        //    var objStu = new aNotice();
-        //    List<aNotice> resut = new List<aNotice>();
-
-
-        //    string query = string.Format("Select * From Notices");
-        //    SqlConnection conn = new SqlConnection(connectionString);
-        //    conn.Open();
-        //    SqlCommand cmd = new SqlCommand(query, conn);
-        //    SqlDataReader dataReader = cmd.ExecuteReader();
-        //    if (dataReader.HasRows)
-        //    {
-        //        while (dataReader.Read())
-        //        {
-        //            aNotice obj = new aNotice
-        //            {
-
-        //                Title = dataReader["Title"].ToString(),
-        //                Description = dataReader["Description"].ToString(),
-        //            };
-        //            resut.Add(obj);
-
-        //        }
-        //    }
-        //    cmd.Dispose();
-        //    conn.Close();
-        //    conn.Dispose();
-
-        //    return resut;
-
-        //}
+       
 
         public List<aNotice> GetNoticeTitle()
         {
@@ -465,9 +440,11 @@ namespace Notice.DAL
                 {
 
                     obj.DateAndTime_p = DateTime.Now;
-                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,Title,Description,CategoryID,AdminID) VALUES(@dp,@t,@d,@c,@a)";
+                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,DateAndTime_Show,DateAndTime_Expire,Title,Description,CategoryID,AdminID) VALUES(@dp,@ds,@de,@t,@d,@c,@a)";
 
                     command.Parameters.AddWithValue("@dp", obj.DateAndTime_p);
+                    command.Parameters.AddWithValue("@ds",obj.DateAndTime_Show);
+                    command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
                     command.Parameters.AddWithValue("@t", obj.Title);
                     command.Parameters.AddWithValue("@d", obj.Description);
                     command.Parameters.AddWithValue("@c", obj.CategoryID);
@@ -484,6 +461,7 @@ namespace Notice.DAL
 
         }
 
+      
 
         public string UpdateNotice(aNotice obj)
         {
@@ -493,14 +471,13 @@ namespace Notice.DAL
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Update Notices set DateAndTime_Expire=@de,DateAndTime_Show=@ds,Title=@t,Description=@d,CategoryID=@c,AdminID=@a where NoticeID=@id";
-                    //VALUES(@dp,@de,@ds,@t,@d,@c,@a,@p,@h)";
-                    command.Parameters.AddWithValue("@id", obj.NoticeID);
+
                     //??(object)DBNull.Value
                     //string newFormat = DateTime.ParseExact(theDate, "dd'.'MM'.'yyyy", CultureInfo.InvariantCulture).ToString("yyyy'/'MM'/'dd")
 
-                   var e = Convert.ToDateTime(obj.DateAndTime_Expire.Value.Day + "/" + obj.DateAndTime_Expire.Value.Month + "/" + obj.DateAndTime_Expire.Value.Year);
-                    command.Parameters.AddWithValue("@de", e);
-                    command.Parameters.AddWithValue("@ds",e);
+                    command.Parameters.AddWithValue("@id", obj.NoticeID);
+                    command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@ds",obj.DateAndTime_Show ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@t", obj.Title);
                     command.Parameters.AddWithValue("@d", obj.Description);
                     command.Parameters.AddWithValue("@c", obj.CategoryID);
@@ -511,6 +488,8 @@ namespace Notice.DAL
             }
 
         }
+
+      
 
         public void DeleteNotice(aNotice ad)
         {

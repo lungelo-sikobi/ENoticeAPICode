@@ -16,21 +16,22 @@ namespace Notice.Models
         public DateTime? DateAndTime_p { get; set; }
        
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DateAndTime_Expire { get; set; }
 
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DateAndTime_Show { get; set; }
 
         [Required]
         public string Title { get; set; }
-        
+
+
+
+
         [Required]
-      
-      
-       
         public string Description { get; set; }
        
         public int CategoryID { get; set; }

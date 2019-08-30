@@ -26,15 +26,18 @@ namespace Notice.Models
         [EmailAddress]
         public string Email { get; set; }
         //^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$
+      
         [Required]
-        [RegularExpression(@"^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", ErrorMessage = "your password should contain one special character, one uppercase, one lowercase(in any order) and be 8 characters long")]
-        public string Password { get; set; }
+         public string Password { get; set; }
 
         [Required]
         public string DepartID { get; set; }
 
+        [Required]
+        public int CategoryID { get; set; }
+
         public bool LoggedOnce { get; set; }
 
-
+        public bool SuperAdmin { get; set; }
     }
 }
