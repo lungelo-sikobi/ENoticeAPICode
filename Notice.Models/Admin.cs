@@ -35,6 +35,7 @@ namespace Notice.Models
 
         public bool LoggedOnce { get; set; }
 
+       
 
     }
 }

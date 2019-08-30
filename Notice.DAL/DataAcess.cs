@@ -160,12 +160,11 @@ namespace Notice.DAL
                     ChangePassword obj = new ChangePassword
                     {
                         AdminID = Convert.ToInt32(dataReader["AdminID"].ToString()),
-                  
-                       
+                
+                     
                        
                         Password = dataReader["Password"].ToString(),
                     
-
                     };
                     resut.Add(obj);
 
@@ -260,13 +259,12 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,Password=@p,DepartID=@d  where AdminID=@id";
+                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,DepartID=@d  where AdminID=@id";
 
                     command.Parameters.AddWithValue("@id", obj.AdminID);
                     command.Parameters.AddWithValue("@n", obj.Name);
                     command.Parameters.AddWithValue("@s", obj.Surname);
                     command.Parameters.AddWithValue("@e", obj.Email);
-                    command.Parameters.AddWithValue("@p", obj.Password);
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                   
                     
@@ -309,8 +307,8 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand comm = connection.CreateCommand())
                 {
-                    comm.CommandText = "Delete from Admin where AdminID=@AdminID";
-                    comm.Parameters.AddWithValue("@AdminID", ad.AdminID);
+                    comm.CommandText = "Delete from Admin where AdminID = @id";
+                    comm.Parameters.AddWithValue("@id", ad.AdminID);
                     comm.ExecuteNonQuery();
                 }
             }
@@ -357,40 +355,7 @@ namespace Notice.DAL
         }
 
 
-        //public List<aNotice> GetNoticeTitle()
-        //{
-
-        //    var objStu = new aNotice();
-        //    List<aNotice> resut = new List<aNotice>();
-
-
-        //    string query = string.Format("Select * From Notices");
-        //    SqlConnection conn = new SqlConnection(connectionString);
-        //    conn.Open();
-        //    SqlCommand cmd = new SqlCommand(query, conn);
-        //    SqlDataReader dataReader = cmd.ExecuteReader();
-        //    if (dataReader.HasRows)
-        //    {
-        //        while (dataReader.Read())
-        //        {
-        //            aNotice obj = new aNotice
-        //            {
-
-        //                Title = dataReader["Title"].ToString(),
-        //                Description = dataReader["Description"].ToString(),
-        //            };
-        //            resut.Add(obj);
-
-        //        }
-        //    }
-        //    cmd.Dispose();
-        //    conn.Close();
-        //    conn.Dispose();
-
-        //    return resut;
-
-        //}
-
+        
         public List<aNotice> GetNoticeTitle()
         {
 
@@ -429,34 +394,8 @@ namespace Notice.DAL
 
 
 
-        //public void InsertNotice(aNotice obj)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        connection.Open();
-        //        using (SqlCommand command = connection.CreateCommand())
-        //        {
-        //            command.CommandText = "INSERT INTO Notices(DateAndTime_p,DateAndTime_Expire,DateAndTime_Show,Title,Description,CategoryID,AdminID,Picture,HasImage) VALUES(@dp,@de,@ds,@t,@d,@c,@a,@p,@h)";
-        //            //VALUES(@dp,@de,@ds,@t,@d,@c,@a,@p,@h)";
 
-        //            command.Parameters.AddWithValue("@dp", obj.DateAndTime_p);
-        //            command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
-        //            command.Parameters.AddWithValue("@ds", obj.DateAndTime_Show);
-        //            command.Parameters.AddWithValue("@t", obj.Title);
-        //            command.Parameters.AddWithValue("@d", obj.Description);
-        //            command.Parameters.AddWithValue("@c", obj.CategoryID);
-        //            command.Parameters.AddWithValue("@a", obj.AdminID);
-        //            command.Parameters.AddWithValue("@p", obj.Picture);
-        //            command.Parameters.AddWithValue("@h", obj.HasImage);
-
-
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-
-        //}
-
-        public string InsertNotice(aNotice obj)
+        public int InsertNotice(aNotice obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -465,22 +404,23 @@ namespace Notice.DAL
                 {
 
                     obj.DateAndTime_p = DateTime.Now;
-                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,Title,Description,CategoryID,AdminID) VALUES(@dp,@t,@d,@c,@a)";
+
+                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,Title,Description,CategoryID,AdminID,DateAndTime_Show,DateAndTime_Expire) VALUES(@dp,@t,@d,@c,@a,@ds,@de)";
 
                     command.Parameters.AddWithValue("@dp", obj.DateAndTime_p);
                     command.Parameters.AddWithValue("@t", obj.Title);
-                    command.Parameters.AddWithValue("@d", obj.Description);
+                    command.Parameters.AddWithValue("@d", obj.Description ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@c", obj.CategoryID);
                     command.Parameters.AddWithValue("@a", obj.AdminID);
-                  
-                   
-
-
+                    command.Parameters.AddWithValue("@ds", obj.DateAndTime_Show ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
                     command.ExecuteNonQuery();
-                    return "";
-                }
-            }
 
+                    return 1;
+                }
+               
+            }
+          
 
         }
 
@@ -497,10 +437,13 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@id", obj.NoticeID);
                     //??(object)DBNull.Value
                     //string newFormat = DateTime.ParseExact(theDate, "dd'.'MM'.'yyyy", CultureInfo.InvariantCulture).ToString("yyyy'/'MM'/'dd")
+                    // DateTime.ParseExact(txt_dateF.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy/MM/dd"));
 
-                   var e = Convert.ToDateTime(obj.DateAndTime_Expire.Value.Day + "/" + obj.DateAndTime_Expire.Value.Month + "/" + obj.DateAndTime_Expire.Value.Year);
-                    command.Parameters.AddWithValue("@de", e);
-                    command.Parameters.AddWithValue("@ds",e);
+
+                    obj.DateAndTime_Show = new DateTime(obj.DateAndTime_Show.Value.Year, obj.DateAndTime_Show.Value.Month,obj.DateAndTime_Show.Value.Day);
+
+                    command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
+                    command.Parameters.AddWithValue("@ds",obj.DateAndTime_Show);
                     command.Parameters.AddWithValue("@t", obj.Title);
                     command.Parameters.AddWithValue("@d", obj.Description);
                     command.Parameters.AddWithValue("@c", obj.CategoryID);
