@@ -16,12 +16,12 @@ namespace Notice.Models
         public DateTime? DateAndTime_p { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd HH:MM}")]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-mm-dd HH:MM}")]
         public DateTime? DateAndTime_Expire { get; set; }
 
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd HH:MM}")]
+       // [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd HH:MM}")]
         public DateTime? DateAndTime_Show { get; set; }
 
         [Required]
@@ -31,11 +31,12 @@ namespace Notice.Models
       
         public string Description { get; set; }
        
-        public int CategoryID { get; set; }
+        public string CategoryID { get; set; }
        
         public int AdminID { get; set; }
         
         public string CatName { get; set; }
-       
+        public string  DepartmentID { get; set; }
+
     }
 }

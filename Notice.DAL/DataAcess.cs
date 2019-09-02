@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Net.Mail;
 using System.Text;
+
 
 namespace Notice.DAL
 {
@@ -98,6 +98,7 @@ namespace Notice.DAL
             }
         }
 
+
         ///Admins_______________________________________________________________________________________________________
         ///
         public List<Admin> GetAdmins()
@@ -189,7 +190,8 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                   
+                    try
+                    {
 
                         command.CommandText = "INSERT INTO Admin (Name,Surname,Email,Password,DepartID,LoggedOnce,SuperAdmin) VALUES(@n,@s,@e,@p,@d,@l,@sa)";
 
@@ -241,10 +243,17 @@ namespace Notice.DAL
                             SmtpServer.Send(mail);
                             return "Admin Successfully Registered!!!";
                         }
+
                         catch
                         {
-                            return "Please Check your Internet Connection,There are services that require internet connection";
+                            return "Could not send password to admin,Network";
                         }
+                     }
+                    
+            catch
+                {
+                 return "Admin with same email address already exists";
+                 }
 
 
                     
@@ -264,7 +273,7 @@ namespace Notice.DAL
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,DepartID=@d,SuperAdmin=@sa  where AdminID=@id";
+                    command.CommandText = "Update  Admin set Name=@n,Surname=@s,Email=@e,DepartID=@d,SuperAdmin=@sa,CategoryID=@ct  where AdminID=@id";
 
                     command.Parameters.AddWithValue("@id", obj.AdminID);
                     command.Parameters.AddWithValue("@n", obj.Name);
@@ -272,6 +281,7 @@ namespace Notice.DAL
                     command.Parameters.AddWithValue("@e", obj.Email);
                     command.Parameters.AddWithValue("@d", obj.DepartID);
                     command.Parameters.AddWithValue("@sa", obj.SuperAdmin);
+                    command.Parameters.AddWithValue("@Ct", obj.CategoryID);
                    // command.Parameters.AddWithValue("@cat", obj.CategoryID);
 
                     i = command.ExecuteNonQuery();
@@ -346,8 +356,10 @@ namespace Notice.DAL
                         NoticeID = Convert.ToInt32(dataReader["NoticeID"].ToString()),
                         DateAndTime_p = Convert.ToDateTime(dataReader["DateAndTime_p"].ToString()),
                         Title = dataReader["Title"].ToString(),
-                        Description = dataReader["Description"].ToString()
-                      
+                        Description = dataReader["Description"].ToString(),
+                        DateAndTime_Expire = dataReader["DateAndTime_Expire"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["DateAndTime_Expire"])
+
+                        //DateAndTime_Show = Convert.ToDateTime(dataReader["DateAndTime_Show"] ?? (object)DBNull.Value),
 
                     };
                     resut.Add(obj);
@@ -367,12 +379,12 @@ namespace Notice.DAL
 
         public List<aNotice> GetNoticeTitle()
         {
-
+          string datenow = DateTime.Now.ToLongDateString();
             var objStu = new aNotice();
             List<aNotice> resut = new List<aNotice>();
 
-
-            string query = string.Format("Select * From Notices where CategoryID = 4020");
+          
+            string query = string.Format("Select * From Notices where DateAndTime_Show <= GETDATE()  AND DateAndTime_Expire > GETDATE()  AND CategoryID = 4020");
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -413,17 +425,16 @@ namespace Notice.DAL
                 {
 
                     obj.DateAndTime_p = DateTime.Now;
-                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,DateAndTime_Show,DateAndTime_Expire,Title,Description,CategoryID,AdminID) VALUES(@dp,@ds,@de,@t,@d,@c,@a)";
+                    command.CommandText = "INSERT INTO Notices(DateAndTime_p,DateAndTime_Expire,DateAndTime_Show,Title,Description,CategoryID,AdminID) VALUES(@dp,@de,@ds,@t,@d,@c,@a)";
 
                     command.Parameters.AddWithValue("@dp", obj.DateAndTime_p);
-                    command.Parameters.AddWithValue("@ds",obj.DateAndTime_Show);
                     command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
                     command.Parameters.AddWithValue("@t", obj.Title);
                     command.Parameters.AddWithValue("@d", obj.Description ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@c", obj.CategoryID);
                     command.Parameters.AddWithValue("@a", obj.AdminID);
                     command.Parameters.AddWithValue("@ds", obj.DateAndTime_Show ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire);
+                  
                     command.ExecuteNonQuery();
 
                     return 1;
@@ -450,8 +461,6 @@ namespace Notice.DAL
                     // DateTime.ParseExact(txt_dateF.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy/MM/dd"));
 
 
-                    obj.DateAndTime_Show = new DateTime(obj.DateAndTime_Show.Value.Year, obj.DateAndTime_Show.Value.Month,obj.DateAndTime_Show.Value.Day);
-
                     command.Parameters.AddWithValue("@id", obj.NoticeID);
                     command.Parameters.AddWithValue("@de", obj.DateAndTime_Expire ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@ds",obj.DateAndTime_Show ?? (object)DBNull.Value);
@@ -466,7 +475,92 @@ namespace Notice.DAL
 
         }
 
-      
+        ///catagories_____________________________________________________________________________________________________
+        ///
+        public List<Categories> GetDepartment()
+        {
+
+            var objStu = new Categories();
+            List<Categories> resut = new List<Categories>();
+
+
+            string query = string.Format("Select * From Categories");
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(query, conn);
+            SqlDataReader dataReader = cmd.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    Categories obj = new Categories
+                    {
+                        ID = Convert.ToInt32(dataReader["CategoryID"].ToString()),
+                        Name = dataReader["CategoryName"].ToString(),
+                        description = dataReader["CategoryDescription"].ToString()
+                    };
+                    resut.Add(obj);
+
+                }
+            }
+            cmd.Dispose();
+            conn.Close();
+            conn.Dispose();
+
+            return resut;
+        }
+
+        public int InsertDepartment(Categories obj)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "INSERT INTO Categories(CategoryName,CategoryDescription) VALUES(@Name,@description)";
+
+                    command.Parameters.AddWithValue("@Name", obj.Name);
+                    command.Parameters.AddWithValue("@description", obj.description);
+                    command.ExecuteNonQuery();
+                    return 1;
+                }
+            }
+
+
+        }
+
+        public string UpdateDepartment(Categories obj)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Update  Categories SET CategoryName=@nm,CategoryDescription=@dec where CategoryID=@id";
+                    command.Parameters.AddWithValue("@id", obj.ID);
+                    command.Parameters.AddWithValue("@nm", obj.Name);
+                    command.Parameters.AddWithValue("@dec", obj.description);
+                    command.ExecuteNonQuery();
+                    return "";
+                }
+            }
+
+        }
+
+        public void DeleteDepartment(Categories ob)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand comm = connection.CreateCommand())
+                {
+                    comm.CommandText = "Delete from Categories where CategoryID=" + ob.ID;
+                    comm.ExecuteNonQuery();
+                }
+            }
+        }
+
+
 
         public void DeleteNotice(aNotice ad)
         {
